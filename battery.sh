@@ -15,11 +15,11 @@ function battery () {
 	fi
 
 	BATT_DATA="$(cat $BATT_PATH/energy_now) / $(cat $BATT_PATH/power_now)"
-	BATT_DATA="$(echo "scale=3; $BATT_DATA" | bc)"
+	BATT_DATA="$(echo "scale=8; $BATT_DATA" | bc)"
 	
 	echo -n "$(cat $BATT_PATH/status) $(cat $BATT_PATH/capacity)% " 
 
 	BATT_HOUR="$(echo "$BATT_DATA" | cut -d'.' -f1)"
-	BATT_MINS="$(echo "$BATT_DATA * 60" | bc | cut -d'.' -f1 | cut -b 1,2)"
+	BATT_MINS="$(echo ".$(echo "$BATT_DATA" | cut -d'.' -f2) * 60" | bc | cut -d'.' -f1 | cut -b 1,2)"
 	printf "(%02d:%02d remaining)\n" "$BATT_HOUR" "$BATT_MINS" 	
 }
