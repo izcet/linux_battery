@@ -8,8 +8,14 @@ BATT_PATH="/sys/class/power_supply/BATT"
 
 function battery () {
 
+	# If your battery is full, a divide-by-zero error occurs later.
+	if [ "$(cat $BATT_PATH/status)" == "Full" ] ; then
+		echo "Battery is fully charged."
+		exit 0
+	fi
+
 	# Sometimes this file reads 0 if the power source recently changed,
-	# which causes a divide-by-zero error later on.
+	# which also causes a divide-by-zero error later on.
 	# Slowing so the system can catch up usually avoids the problem.
 	if [ "$(cat $BATT_PATH/power_now)" -eq "0" ] ; then
 		echo "(Power source recently changed...)"
