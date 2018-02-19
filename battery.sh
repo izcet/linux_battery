@@ -11,7 +11,7 @@ function battery () {
 	# If your battery is full, a divide-by-zero error occurs later.
 	if [ "$(cat $BATT_PATH/status)" == "Full" ] ; then
 		echo "Battery is fully charged."
-		exit 0
+		return 0
 	fi
 
 	# Sometimes this file reads 0 if the power source recently changed,
